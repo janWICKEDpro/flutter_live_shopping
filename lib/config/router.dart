@@ -1,4 +1,6 @@
 import 'package:go_router/go_router.dart';
+import 'package:flutter_live_shopping/screens/checkout/checkout_screen.dart';
+import 'package:flutter_live_shopping/screens/checkout/checkout_success_screen.dart';
 import 'package:flutter_live_shopping/screens/home/home_screen.dart';
 import 'package:flutter_live_shopping/screens/live/live_event_screen.dart';
 import 'package:flutter_live_shopping/screens/product/product_detail_screen.dart';
@@ -22,6 +24,16 @@ final _router = GoRouter(
     GoRoute(
       path: '/profile',
       builder: (context, state) => const ProfileScreen(),
+    ),
+    GoRoute(
+      path: '/checkout',
+      builder: (context, state) => const CheckoutScreen(),
+      routes: [
+        GoRoute(
+          path: 'success',
+          builder: (context, state) => const CheckoutSuccessScreen(),
+        ),
+      ],
     ),
   ],
 );

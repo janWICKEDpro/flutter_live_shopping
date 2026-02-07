@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_live_shopping/config/theme_config.dart';
 import 'package:flutter_live_shopping/models/cart_item.dart';
 import 'package:flutter_live_shopping/providers/cart_provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 class CartDrawer extends StatelessWidget {
@@ -128,8 +129,8 @@ class CartDrawer extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () {
                             // Proceed to checkout
-                            Navigator.pop(context);
-                            // context.go('/checkout');
+                            Navigator.pop(context); // Close drawer
+                            context.push('/checkout');
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary,

@@ -23,6 +23,7 @@ dependencies:
   shimmer: ^3.0.0
   video_player: ^2.10.1
   chewie: ^1.13.0
+  toastification: ^3.0.3
 
 dev_dependencies:
   flutter_test:

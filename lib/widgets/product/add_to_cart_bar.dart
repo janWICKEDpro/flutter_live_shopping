@@ -4,6 +4,7 @@ import 'package:flutter_live_shopping/models/product.dart';
 import 'package:flutter_live_shopping/providers/cart_provider.dart';
 import 'package:flutter_live_shopping/widgets/product/quantity_selector.dart';
 import 'package:provider/provider.dart';
+import 'package:toastification/toastification.dart';
 
 class AddToCartBar extends StatefulWidget {
   final Product product;
@@ -19,6 +20,17 @@ class _AddToCartBarState extends State<AddToCartBar> {
 
   @override
   Widget build(BuildContext context) {
+    // Listen to cart provider to check if item is already in cart
+    final cart = context.watch<CartProvider>();
+
+    // indexWhere is safer
+    final cartItemIndex = cart.items.indexWhere(
+      (item) => item.product.id == widget.product.id,
+    );
+    final int quantityInCart = cartItemIndex != -1
+        ? cart.items[cartItemIndex].quantity
+        : 0;
+
     return Container(
       padding: EdgeInsets.fromLTRB(
         16,
@@ -38,59 +50,101 @@ class _AddToCartBarState extends State<AddToCartBar> {
       ),
       child: SafeArea(
         top: false,
-        child: Row(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            QuantitySelector(
-              quantity: _quantity,
-              maxQuantity: widget.product.stock,
-              onChanged: (value) {
-                setState(() {
-                  _quantity = value;
-                });
-              },
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: SizedBox(
-                height: 48,
-                child: ElevatedButton(
-                  onPressed: widget.product.stock > 0
-                      ? () {
-                          context.read<CartProvider>().addToCart(
-                            widget.product,
-                            quantity: _quantity,
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                'Added $_quantity ${widget.product.name} to cart',
-                              ),
-                              action: SnackBarAction(
-                                label: 'VIEW CART',
-                                onPressed: () {
-                                  // Open cart drawer?
-                                  // For now, simpler notification
-                                  // Ideally trigger drawer open via callback or global key
-                                },
-                              ),
-                            ),
-                          );
-                        }
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColors.primary,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+            if (quantityInCart > 0)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.shopping_bag,
+                      size: 16,
+                      color: AppColors.primary,
                     ),
-                    elevation: 0,
-                  ),
-                  child: const Text(
-                    'Add to Cart',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
+                    const SizedBox(width: 4),
+                    Text(
+                      '$quantityInCart already in cart',
+                      style: const TextStyle(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
                 ),
               ),
+            Row(
+              children: [
+                QuantitySelector(
+                  quantity: _quantity,
+                  maxQuantity: widget.product.stock,
+                  onChanged: (value) {
+                    setState(() {
+                      _quantity = value;
+                    });
+                  },
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: SizedBox(
+                    height: 48,
+                    child: ElevatedButton(
+                      onPressed: widget.product.stock > 0
+                          ? () {
+                              context.read<CartProvider>().addToCart(
+                                widget.product,
+                                quantity: _quantity,
+                              );
+
+                              toastification.show(
+                                context: context,
+                                type: ToastificationType.success,
+                                style: ToastificationStyle.fillColored,
+                                title: const Text('Added to Cart'),
+                                description: Text(
+                                  'Successfully added $_quantity ${widget.product.name}',
+                                ),
+                                alignment: Alignment.topCenter,
+                                autoCloseDuration: const Duration(seconds: 3),
+                                animationBuilder:
+                                    (context, animation, alignment, child) {
+                                      return FadeTransition(
+                                        opacity: animation,
+                                        child: child,
+                                      );
+                                    },
+                                icon: const Icon(
+                                  Icons.check_circle_outline,
+                                  color: Colors.white,
+                                ),
+                                primaryColor: AppColors.success,
+                                foregroundColor: Colors.white,
+                                showProgressBar: false,
+                              );
+                            }
+                          : null,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 0,
+                      ),
+                      child: const Text(
+                        'Add to Cart',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
