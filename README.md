@@ -1,4 +1,4 @@
-# Flutter Live Shopping 🛍️
+# Flutter Live Shopping 
 
 Une application de shopping en direct (live shopping) développée avec Flutter, permettant aux utilisateurs de regarder des événements en direct, découvrir des produits, et effectuer des achats en temps réel.
 
@@ -6,7 +6,7 @@ Une application de shopping en direct (live shopping) développée avec Flutter,
 ![Dart](https://img.shields.io/badge/Dart-3.10.8-0175C2?logo=dart)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
-## 📱 Fonctionnalités
+##  Fonctionnalités
 
 - **Événements en Direct** : Visionnage de streams en direct avec compteur de spectateurs
 - **Catalogue de Produits** : Navigation et recherche de produits
@@ -24,7 +24,7 @@ Une application de shopping en direct (live shopping) développée avec Flutter,
 - Flutter SDK 3.10.8 ou supérieur
 - Dart SDK 3.10.8 ou supérieur
 - Un éditeur de code (VS Code, Android Studio, IntelliJ IDEA)
-- Un émulateur ou appareil physique (iOS/Android) ou un navigateur web
+- un navigateur web
 
 ### Installation
 
@@ -169,60 +169,8 @@ test/
   - Ombres et élévations sur hover
   - Badges de notification en temps réel
 
-##  Difficultés Rencontrées
 
-### 1. Parsing des Données Mock
-**Problème** : Erreur "type 'String' is not a subtype of type 'int'" lors du chargement initial.
-
-**Solution** : Le panier dans `mock-api-data.json` était structuré comme un tableau d'objets utilisateur, mais le code tentait d'y accéder comme un objet direct. Correction de la logique de parsing dans `MockApiService`.
-
-### 2. Gestion des États Asynchrones
-**Problème** : Synchronisation entre les données du panier et l'affichage du badge.
-
-**Solution** : Utilisation de `Consumer` widgets pour écouter les changements du `CartProvider` et mise à jour automatique de l'UI.
-
-### 3. Hero Animations
-**Problème** : Conflits de tags Hero entre les différentes instances de produits.
-
-**Solution** : Utilisation de tags uniques basés sur l'ID du produit (`'product-${product.id}'`).
-
-### 4. Responsive Design
-**Problème** : Tailles de cartes incohérentes entre les sections (notamment "Past Streams").
-
-**Solution** : Utilisation systématique de `AspectRatio` (16:9) pour garantir des dimensions uniformes.
-
-### 5. Optimisation Web
-**Problème** : Temps de chargement initial lent sur le web.
-
-**Solution** : Ajout de preconnect links, optimisation des images, et implémentation d'un loading indicator personnalisé.
-
-## 🚀 Améliorations Possibles
-
-### Court Terme
-1. **Authentification Réelle** : Intégration Firebase Auth ou OAuth
-2. **API Backend** : Remplacement des services mock par une vraie API REST
-3. **WebSocket Réel** : Connexion à un serveur WebSocket pour le chat en direct
-4. **Paiement** : Intégration Stripe ou PayPal
-5. **Notifications Push** : Firebase Cloud Messaging
-
-### Moyen Terme
-6. **Recherche Avancée** : Filtres multiples, tri, suggestions
-7. **Favoris** : Sauvegarde de produits et événements
-8. **Historique** : Consultation des commandes passées
-9. **Profil Utilisateur** : Gestion des informations personnelles
-10. **Mode Hors Ligne** : Cache local avec synchronisation
-
-### Long Terme
-11. **Streaming Vidéo Réel** : Intégration WebRTC ou service de streaming
-12. **Chat en Direct** : Messages en temps réel avec modération
-13. **Analytics** : Suivi du comportement utilisateur
-14. **A/B Testing** : Optimisation de l'expérience utilisateur
-15. **Internationalisation** : Support multilingue complet
-16. **Accessibilité** : Screen reader, navigation clavier complète
-17. **Tests E2E** : Tests d'intégration automatisés
-18. **CI/CD** : Pipeline de déploiement automatisé
-
-## 📊 Tests
+## Tests
 
 ### Lancer les Tests
 ```bash
@@ -246,12 +194,13 @@ genhtml coverage/lcov.info -o coverage/html
 open coverage/html/index.html
 ```
 
-```markdown
-## 📸 Screenshots
 
+##  Screenshots
+
+```markdown
 | Page d'Accueil | Événement en Direct |
 | :---: | :---: |
-| ![Home Screen](screenshots/home_screen.png) | ![Live Event](screenshots/live_event_screen.png) |
+| ![Home Screen](screenshots/home_screen.png) | ![Live Event](screenshots/live_event_screen_small.png) |
 | **Détails Produit** | **Panier et Checkout** |
 | ![Product Details](screenshots/product_details_screen.png) | ![Checkout](screenshots/checkout.png) |
 ```
@@ -259,9 +208,9 @@ open coverage/html/index.html
 ##  Vidéo de Démonstration
 
 
-[Voir la vidéo de démonstration](link-to-video)
+[Voir la vidéo de démonstration](https://drive.google.com/file/d/1A9kBNZGIXWgD__xvomTjoRD4_v0nMeva/view?usp=sharing)
 
-## 📝 License
+## License
 
 Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de détails.
 
