@@ -43,3 +43,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Mock API Data
+ctx.md
+mock-api-data.json
+EXERCICES.md
+MOCK_SERVICE_EXAMPLE.md
