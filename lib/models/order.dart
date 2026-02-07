@@ -36,7 +36,7 @@ class Order {
   final double total;
   final OrderStatus status;
   final DateTime createdAt;
-  final Map<String, dynamic> shippingAddress;
+  final Map<String, dynamic>? shippingAddress;
 
   Order({
     required this.id,

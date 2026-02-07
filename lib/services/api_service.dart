@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_live_shopping/models/live_event.dart';
@@ -24,17 +25,17 @@ class MockApiService {
   List<Order> _orders = [];
   final String _currentUserId = 'user_001';
 
-  // Load mock data from assets
   Future<void> _loadMockData() async {
     if (_mockData != null) return;
 
     try {
       final jsonString = await _bundle.loadString('assets/mock-api-data.json');
-      _mockData = json.decode(jsonString);
+      final decoded = json.decode(jsonString);
+      _mockData = decoded is Map<String, dynamic> ? decoded : {};
 
-      // Initialize orders from mock data if needed
-      if (_mockData!['orders'] != null) {
+      if (_mockData!['orders'] is List) {
         _orders = (_mockData!['orders'] as List)
+            .whereType<Map<String, dynamic>>()
             .map((json) => Order.fromJson(json))
             .toList();
       }
@@ -42,6 +43,7 @@ class MockApiService {
       // Initialize cart from mock data if needed
       if (_mockData!['cart'] != null && _mockData!['cart']['items'] != null) {
         final cartItems = _mockData!['cart']['items'] as List;
+        log("cartItems: $cartItems");
         // We need to fetch product details for each cart item
         // This is a simplification; in a real app, cart items might not have full product details initially
         // or would fetch them. Here we'll try to hydrate them.
@@ -54,7 +56,7 @@ class MockApiService {
         }
       }
     } catch (e) {
-      print('Error loading mock data: $e');
+      log('Error loading mock data: $e');
       rethrow;
     }
   }
@@ -86,39 +88,45 @@ class MockApiService {
 
     final eventsData = _mockData!['liveEvents'] as List;
     final productsData = _mockData!['products'] as List;
-
+    log("${eventsData.length}");
+    log("${eventsData.first}");
     return eventsData.map((eventJson) {
-      // Hydrate products
-      final productIds = (eventJson['products'] as List).cast<String>();
-      final products = productIds
-          .map((id) {
-            final productJson = productsData.firstWhere(
-              (p) => p['id'] == id,
-              orElse: () => null,
-            );
-            return productJson != null ? Product.fromJson(productJson) : null;
-          })
-          .whereType<Product>()
-          .toList();
+      try {
+        // Hydrate products
+        final productIds = (eventJson['products'] as List).cast<String>();
+        final products = productIds
+            .map((id) {
+              final productJson = productsData.firstWhere(
+                (p) => p['id'] == id,
+                orElse: () => null,
+              );
+              return productJson != null ? Product.fromJson(productJson) : null;
+            })
+            .whereType<Product>()
+            .toList();
 
-      // Hydrate featured product
-      Product? featuredProduct;
-      if (eventJson['featuredProduct'] != null) {
-        final featuredId = eventJson['featuredProduct'] as String;
-        final featuredJson = productsData.firstWhere(
-          (p) => p['id'] == featuredId,
-          orElse: () => null,
-        );
-        if (featuredJson != null) {
-          featuredProduct = Product.fromJson(featuredJson);
+        // Hydrate featured product
+        Product? featuredProduct;
+        if (eventJson['featuredProduct'] != null) {
+          final featuredId = eventJson['featuredProduct'] as String;
+          final featuredJson = productsData.firstWhere(
+            (p) => p['id'] == featuredId,
+            orElse: () => null,
+          );
+          if (featuredJson != null) {
+            featuredProduct = Product.fromJson(featuredJson);
+          }
         }
-      }
 
-      return LiveEvent.fromJson({
-        ...eventJson,
-        'products': products.map((p) => p.toJson()).toList(),
-        'featuredProduct': featuredProduct?.toJson(),
-      });
+        return LiveEvent.fromJson({
+          ...eventJson,
+          'products': products.map((p) => p.toJson()).toList(),
+          'featuredProduct': featuredProduct?.toJson(),
+        });
+      } catch (e) {
+        log('Error parsing event ${eventJson['id']}: $e');
+        rethrow;
+      }
     }).toList();
   }
 
