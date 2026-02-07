@@ -1,5 +1,7 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_live_shopping/models/live_event.dart';
+import 'package:flutter_live_shopping/models/chat_message.dart';
 import 'package:flutter_live_shopping/services/api_service.dart';
 import 'package:flutter_live_shopping/services/socket_service.dart';
 
@@ -12,24 +14,29 @@ class LiveEventProvider extends ChangeNotifier {
   List<LiveEvent> _events = [];
   List<LiveEvent> _filteredEvents = [];
 
+  // Live Session State
+  final List<ChatMessage> _messages = [];
+  int _currentViewerCount = 0;
+  String? _currentFeaturedProductId;
+
+  StreamSubscription? _viewerCountSubscription;
+  StreamSubscription? _chatSubscription;
+  StreamSubscription? _productFeaturedSubscription;
+
   // Filters
   String _searchQuery = '';
   LiveEventStatus? _statusFilter;
   String? _categoryFilter;
 
-  LiveEventProvider(this._apiService, this._socketService) {
-    _socketService.viewerCount.listen((count) {
-      // In a real app, match event ID. For mock, just update current live events
-      // heavily simplified for this exercise
-      if (_filteredEvents.isNotEmpty) {
-        // notifyListeners(); // trigger update
-      }
-    });
-  }
+  LiveEventProvider(this._apiService, this._socketService);
 
   bool get isLoading => _isLoading;
   String? get error => _error;
   List<LiveEvent> get events => _filteredEvents;
+
+  List<ChatMessage> get messages => List.unmodifiable(_messages);
+  int get currentViewerCount => _currentViewerCount;
+  String? get currentFeaturedProductId => _currentFeaturedProductId;
 
   // Getters for specific sections
   List<LiveEvent> get liveEvents =>
@@ -56,6 +63,48 @@ class LiveEventProvider extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  void joinEvent(String eventId) {
+    _socketService.joinLiveEvent(eventId);
+    _messages.clear();
+    _currentViewerCount = 0;
+    _currentFeaturedProductId = null;
+
+    _viewerCountSubscription?.cancel();
+    _chatSubscription?.cancel();
+    _productFeaturedSubscription?.cancel();
+
+    _viewerCountSubscription = _socketService.viewerCount.listen((count) {
+      _currentViewerCount = count;
+      notifyListeners();
+    });
+
+    _chatSubscription = _socketService.chatMessages.listen((message) {
+      _messages.add(message);
+      notifyListeners();
+    });
+
+    _productFeaturedSubscription = _socketService.productFeatured.listen((
+      productId,
+    ) {
+      _currentFeaturedProductId = productId;
+      notifyListeners();
+    });
+  }
+
+  void leaveEvent() {
+    _socketService.leaveLiveEvent('current');
+    _viewerCountSubscription?.cancel();
+    _chatSubscription?.cancel();
+    _productFeaturedSubscription?.cancel();
+    _messages.clear();
+    _currentViewerCount = 0;
+    notifyListeners();
+  }
+
+  void sendMessage(String text) {
+    _socketService.sendChatMessage(text);
   }
 
   void setSearchQuery(String query) {
@@ -100,5 +149,13 @@ class LiveEventProvider extends ChangeNotifier {
 
       return matchesSearch && matchesStatus && matchesCategory;
     }).toList();
+  }
+
+  @override
+  void dispose() {
+    _viewerCountSubscription?.cancel();
+    _chatSubscription?.cancel();
+    _productFeaturedSubscription?.cancel();
+    super.dispose();
   }
 }

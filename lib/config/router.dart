@@ -12,7 +12,7 @@ final _router = GoRouter(
     GoRoute(
       path: '/live/:id',
       builder: (context, state) =>
-          LiveEventScreen(id: state.pathParameters['id']!),
+          LiveEventScreen(eventId: state.pathParameters['id']!),
     ),
     GoRoute(
       path: '/product/:id',
