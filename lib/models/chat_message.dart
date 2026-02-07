@@ -22,9 +22,19 @@ class ChatMessage {
     this.isVendor = false,
     this.replyTo,
     this.reactions = const [],
-  });
+  }) : assert(message.isNotEmpty, 'Message cannot be empty');
 
   factory ChatMessage.fromJson(Map<String, dynamic> json) =>
       _$ChatMessageFromJson(json);
   Map<String, dynamic> toJson() => _$ChatMessageToJson(this);
+
+  factory ChatMessage.mock() {
+    return ChatMessage(
+      id: 'msg_${DateTime.now().millisecondsSinceEpoch}',
+      senderId: 'user_1',
+      senderName: 'Mock User',
+      message: 'Hello, this is a mock message!',
+      timestamp: DateTime.now(),
+    );
+  }
 }

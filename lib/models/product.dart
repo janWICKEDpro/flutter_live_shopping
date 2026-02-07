@@ -35,7 +35,8 @@ class Product {
     this.category = '',
     this.rating = 0.0,
     this.reviewsCount = 0,
-  });
+  }) : assert(price >= 0, 'Price must be non-negative'),
+       assert(stock >= 0, 'Stock must be non-negative');
 
   double get currentPrice => salePrice ?? price;
   bool get isOnSale => salePrice != null && salePrice! < price;
@@ -43,4 +44,16 @@ class Product {
   factory Product.fromJson(Map<String, dynamic> json) =>
       _$ProductFromJson(json);
   Map<String, dynamic> toJson() => _$ProductToJson(this);
+
+  factory Product.mock() {
+    return Product(
+      id: 'prod_${DateTime.now().millisecondsSinceEpoch}',
+      name: 'Mock Product',
+      description: 'This is a mock product description.',
+      price: 99.99,
+      images: ['https://picsum.photos/200/300'],
+      thumbnail: 'https://picsum.photos/200/300',
+      stock: 10,
+    );
+  }
 }

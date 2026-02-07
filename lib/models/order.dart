@@ -49,8 +49,35 @@ class Order {
     required this.status,
     required this.createdAt,
     required this.shippingAddress,
-  });
+  }) : assert(total >= 0, 'Total must be non-negative'),
+       assert(items.isNotEmpty, 'Order must have at least one item');
 
   factory Order.fromJson(Map<String, dynamic> json) => _$OrderFromJson(json);
   Map<String, dynamic> toJson() => _$OrderToJson(this);
+
+  factory Order.mock() {
+    return Order(
+      id: 'ord_${DateTime.now().millisecondsSinceEpoch}',
+      userId: 'user_1',
+      liveEventId: 'evt_1',
+      items: [
+        OrderItem(
+          productId: 'prod_1',
+          name: 'Mock Product',
+          quantity: 1,
+          price: 99.99,
+        ),
+      ],
+      subtotal: 99.99,
+      shipping: 5.00,
+      total: 104.99,
+      status: OrderStatus.pending,
+      createdAt: DateTime.now(),
+      shippingAddress: {
+        'street': '123 Mock St',
+        'city': 'Mock City',
+        'zip': '12345',
+      },
+    );
+  }
 }

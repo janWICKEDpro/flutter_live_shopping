@@ -53,11 +53,33 @@ class LiveEvent {
     this.streamUrl,
     this.replayUrl,
     required this.thumbnailUrl,
-  });
+  }) : assert(
+         endTime == null || endTime.isAfter(startTime),
+         'End time must be after start time',
+       );
 
   factory LiveEvent.fromJson(Map<String, dynamic> json) =>
       _$LiveEventFromJson(json);
   Map<String, dynamic> toJson() => _$LiveEventToJson(this);
+
+  factory LiveEvent.mock() {
+    return LiveEvent(
+      id: 'evt_${DateTime.now().millisecondsSinceEpoch}',
+      title: 'Mock Event',
+      description: 'This is a mock event description.',
+      startTime: DateTime.now(),
+      endTime: DateTime.now().add(const Duration(hours: 2)),
+      status: LiveEventStatus.live,
+      seller: Seller(
+        id: 'seller_1',
+        name: 'Mock Seller',
+        storeName: 'Mock Store',
+        avatar: 'https://i.pravatar.cc/150?img=1',
+      ),
+      thumbnailUrl: 'https://picsum.photos/200/300',
+      viewerCount: 100,
+    );
+  }
 
   LiveEvent copyWith({
     String? id,
