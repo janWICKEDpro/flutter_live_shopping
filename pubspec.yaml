@@ -39,6 +39,7 @@ flutter:
 
   assets:
     - assets/mock-api-data.json
+    - assets/images/
 
   # fonts:
   #   - family: Schyler

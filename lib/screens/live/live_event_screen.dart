@@ -122,7 +122,7 @@ class _LiveEventScreenState extends State<LiveEventScreen> {
                 : Image.network(
                     event.thumbnailUrl,
                     fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => const Center(
+                    errorBuilder: (_, _, _) => const Center(
                       child: Icon(Icons.broken_image, color: Colors.white),
                     ),
                   ),
@@ -366,7 +366,7 @@ class _LiveEventScreenState extends State<LiveEventScreen> {
                   child: ElevatedButton.icon(
                     icon: const Icon(Icons.shopping_cart),
                     label: Consumer<CartProvider>(
-                      builder: (_, cart, __) =>
+                      builder: (_, cart, _) =>
                           Text('Cart (${cart.itemCount})'),
                     ),
                     onPressed: () {
@@ -480,7 +480,7 @@ class _LiveEventScreenState extends State<LiveEventScreen> {
               const SizedBox(height: 8),
               // Cart Icon
               Consumer<CartProvider>(
-                builder: (_, cart, __) => Stack(
+                builder: (_, cart, _) => Stack(
                   children: [
                     IconButton(
                       icon: const Icon(

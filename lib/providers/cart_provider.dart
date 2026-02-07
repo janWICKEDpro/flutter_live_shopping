@@ -5,7 +5,7 @@ import 'package:flutter_live_shopping/services/api_service.dart';
 
 class CartProvider extends ChangeNotifier {
   final MockApiService _apiService;
-  List<CartItem> _items = [];
+  final List<CartItem> _items = [];
   bool _isLoading = false;
 
   CartProvider(this._apiService);

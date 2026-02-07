@@ -3,10 +3,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_live_shopping/config/theme_config.dart';
 import 'package:flutter_live_shopping/models/live_event.dart';
 import 'package:flutter_live_shopping/providers/live_event_provider.dart';
+import 'package:flutter_live_shopping/providers/cart_provider.dart';
 import 'package:flutter_live_shopping/widgets/common/event_card.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -162,45 +164,99 @@ class _HomeScreenState extends State<HomeScreen> {
       pinned: true,
       backgroundColor: AppColors.white,
       surfaceTintColor: Colors.transparent,
-      title: Row(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: AppColors.primary,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: const Icon(
-              FontAwesomeIcons.bagShopping,
-              color: Colors.white,
-              size: 20,
-            ),
+      title: MouseRegion(
+        cursor: SystemMouseCursors.click,
+        child: GestureDetector(
+          onTap: () => context.go('/'),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                'assets/images/live_logo.png',
+                height: 40,
+                fit: BoxFit.contain,
+              ),
+              const SizedBox(width: 12),
+              Text(
+                'Odama',
+                style: GoogleFonts.inter(
+                  fontWeight: FontWeight.w800,
+                  fontSize: 24,
+                  letterSpacing: -0.5,
+                  color: AppColors.gray900,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: 12),
-          Text(
-            'Odama',
-            style: GoogleFonts.inter(
-              fontWeight: FontWeight.w800,
-              fontSize: 24,
-              letterSpacing: -0.5,
-              color: AppColors.gray900,
-            ),
-          ),
-        ],
+        ),
       ),
       actions: [
-        IconButton(icon: const Icon(FontAwesomeIcons.bell), onPressed: () {}),
+        // Cart Icon with Badge
+        Consumer<CartProvider>(
+          builder: (context, cart, child) {
+            return MouseRegion(
+              cursor: SystemMouseCursors.click,
+              child: Stack(
+                children: [
+                  IconButton(
+                    icon: const Icon(FontAwesomeIcons.cartShopping),
+                    onPressed: () => context.push('/checkout'),
+                    tooltip: 'Cart',
+                  ),
+                  if (cart.items.isNotEmpty)
+                    Positioned(
+                      right: 8,
+                      top: 8,
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: const BoxDecoration(
+                          color: AppColors.primary,
+                          shape: BoxShape.circle,
+                        ),
+                        constraints: const BoxConstraints(
+                          minWidth: 16,
+                          minHeight: 16,
+                        ),
+                        child: Text(
+                          '${cart.items.length}',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            );
+          },
+        ),
+        IconButton(
+          icon: const Icon(FontAwesomeIcons.bell),
+          onPressed: () {},
+          tooltip: 'Notifications',
+        ),
         const SizedBox(width: 8),
-        CircleAvatar(
-          radius: 16,
-          backgroundColor: AppColors.gray200,
-          backgroundImage: const NetworkImage(
-            'https://i.pravatar.cc/150?img=68',
-          ),
-          onBackgroundImageError: (_, __) {},
-          child: const Text(
-            'JD',
-            style: TextStyle(fontSize: 10, color: AppColors.gray700),
+        MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () {
+              // Navigate to profile
+            },
+            child: CircleAvatar(
+              radius: 16,
+              backgroundColor: AppColors.gray200,
+              backgroundImage: const NetworkImage(
+                'https://i.pravatar.cc/150?img=68',
+              ),
+              onBackgroundImageError: (_, _) {},
+              child: const Text(
+                'JD',
+                style: TextStyle(fontSize: 10, color: AppColors.gray700),
+              ),
+            ),
           ),
         ),
         const SizedBox(width: 16),
@@ -218,7 +274,11 @@ class _HomeScreenState extends State<HomeScreen> {
             TextField(
               decoration: InputDecoration(
                 hintText: 'Search events, products, or sellers...',
-                prefixIcon: const Icon(Icons.search, color: AppColors.gray500),
+                hintStyle: const TextStyle(
+                  color: AppColors.gray600,
+                  fontSize: 14,
+                ),
+                prefixIcon: const Icon(Icons.search, color: AppColors.gray600),
                 filled: true,
                 fillColor: const Color(0xFFF3F4F6),
                 border: OutlineInputBorder(

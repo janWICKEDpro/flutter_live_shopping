@@ -41,17 +41,22 @@ class MockApiService {
       }
 
       // Initialize cart from mock data if needed
-      if (_mockData!['cart'] != null && _mockData!['cart']['items'] != null) {
-        final cartItems = _mockData!['cart']['items'] as List;
-        log("cartItems: $cartItems");
-        // We need to fetch product details for each cart item
-        // This is a simplification; in a real app, cart items might not have full product details initially
-        // or would fetch them. Here we'll try to hydrate them.
-        for (var item in cartItems) {
-          final productId = item['productId'];
-          final product = await _getProductByIdInternal(productId);
-          if (product != null) {
-            _cart.add(CartItem.fromJson(item).copyWith(product: product));
+      if (_mockData!['cart'] != null && _mockData!['cart'] is List) {
+        final cartData = _mockData!['cart'] as List;
+        if (cartData.isNotEmpty) {
+          // Get the first user's cart (for demo purposes)
+          final userCart = cartData.first;
+          if (userCart['items'] != null) {
+            final cartItems = userCart['items'] as List;
+            log("cartItems: $cartItems");
+            // Hydrate cart items with product details
+            for (var item in cartItems) {
+              final productId = item['productId'];
+              final product = await _getProductByIdInternal(productId);
+              if (product != null) {
+                _cart.add(CartItem.fromJson(item).copyWith(product: product));
+              }
+            }
           }
         }
       }
