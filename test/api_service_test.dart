@@ -55,7 +55,7 @@ void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
   group('ApiService Tests', () {
-    final apiService = ApiService();
+    final apiService = MockApiService();
 
     setUpAll(() async {
       apiService.setAssetBundle(TestAssetBundle());

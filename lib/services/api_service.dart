@@ -6,10 +6,10 @@ import 'package:flutter_live_shopping/models/product.dart';
 import 'package:flutter_live_shopping/models/order.dart';
 import 'package:flutter_live_shopping/models/cart_item.dart';
 
-class ApiService {
-  static final ApiService _instance = ApiService._internal();
-  factory ApiService() => _instance;
-  ApiService._internal();
+class MockApiService {
+  static final MockApiService _instance = MockApiService._internal();
+  factory MockApiService() => _instance;
+  MockApiService._internal();
 
   AssetBundle _bundle = rootBundle;
 

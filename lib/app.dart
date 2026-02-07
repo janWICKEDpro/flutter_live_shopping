@@ -17,23 +17,23 @@ class LiveShoppingApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        Provider(create: (_) => ApiService()),
+        Provider(create: (_) => MockApiService()),
         Provider(create: (_) => SocketService()),
         Provider(create: (_) => AuthService()),
         ChangeNotifierProxyProvider2<
-          ApiService,
+          MockApiService,
           SocketService,
           LiveEventProvider
         >(
           create: (context) => LiveEventProvider(
-            context.read<ApiService>(),
+            context.read<MockApiService>(),
             context.read<SocketService>(),
           ),
           update: (_, api, socket, prev) =>
               prev ?? LiveEventProvider(api, socket),
         ),
-        ChangeNotifierProxyProvider<ApiService, CartProvider>(
-          create: (context) => CartProvider(context.read<ApiService>()),
+        ChangeNotifierProxyProvider<MockApiService, CartProvider>(
+          create: (context) => CartProvider(context.read<MockApiService>()),
           update: (_, api, prev) => prev ?? CartProvider(api),
         ),
         ChangeNotifierProxyProvider<AuthService, AuthProvider>(
