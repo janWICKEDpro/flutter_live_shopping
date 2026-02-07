@@ -46,11 +46,6 @@ Une application de shopping en direct (live shopping) développée avec Flutter,
 
 ### Lancement
 
-#### Sur Mobile/Émulateur
-```bash
-flutter run
-```
-
 #### Sur Web
 ```bash
 flutter run -d chrome
@@ -197,13 +192,12 @@ open coverage/html/index.html
 
 ##  Screenshots
 
-```markdown
 | Page d'Accueil | Événement en Direct |
 | :---: | :---: |
 | ![Home Screen](screenshots/home_screen.png) | ![Live Event](screenshots/live_event_screen_small.png) |
 | **Détails Produit** | **Panier et Checkout** |
 | ![Product Details](screenshots/product_details_screen.png) | ![Checkout](screenshots/checkout.png) |
-```
+
 
 ##  Vidéo de Démonstration
 
