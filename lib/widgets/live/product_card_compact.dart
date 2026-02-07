@@ -45,43 +45,55 @@ class ProductCardCompact extends StatelessWidget {
           children: [
             // Image
             Expanded(
-              child: Stack(
-                children: [
-                  CachedNetworkImage(
-                    imageUrl: product.thumbnail,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    placeholder: (context, url) =>
-                        Container(color: AppColors.gray200),
-                    errorWidget: (context, url, error) => const Icon(
-                      Icons.broken_image,
-                      color: AppColors.gray400,
-                    ),
-                  ),
-                  if (isFeatured)
-                    Positioned(
-                      top: 4,
-                      left: 4,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 6,
-                          vertical: 2,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: const Text(
-                          'FEATURED',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 8,
-                            fontWeight: FontWeight.bold,
+              child: RepaintBoundary(
+                child: Stack(
+                  children: [
+                    Hero(
+                      tag: 'product-${product.id}',
+                      child: CachedNetworkImage(
+                        imageUrl: product.thumbnail,
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        placeholder: (context, url) => Container(
+                          color: AppColors.gray200,
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.primary.withValues(alpha: 0.5),
+                              strokeWidth: 2,
+                            ),
                           ),
+                        ),
+                        errorWidget: (context, url, error) => const Icon(
+                          Icons.broken_image,
+                          color: AppColors.gray400,
                         ),
                       ),
                     ),
-                ],
+                    if (isFeatured)
+                      Positioned(
+                        top: 4,
+                        left: 4,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 6,
+                            vertical: 2,
+                          ),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: const Text(
+                            'FEATURED',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 8,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
               ),
             ),
 

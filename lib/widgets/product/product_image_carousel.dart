@@ -39,14 +39,29 @@ class _ProductImageCarouselState extends State<ProductImageCarousel> {
             });
           },
           itemBuilder: (context, index) {
-            return CachedNetworkImage(
-              imageUrl: widget.images[index],
+            final widget = CachedNetworkImage(
+              imageUrl: this.widget.images[index],
               fit: BoxFit.cover,
-              placeholder: (context, url) =>
-                  Container(color: AppColors.gray200),
+              placeholder: (context, url) => Container(
+                color: AppColors.gray200,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    color: AppColors.primary.withValues(alpha: 0.5),
+                  ),
+                ),
+              ),
               errorWidget: (context, url, error) =>
                   const Center(child: Icon(Icons.error)),
             );
+
+            // Wrap first image in Hero for smooth transition from product card
+            if (index == 0) {
+              return Hero(
+                tag: 'product-${this.widget.images[index]}',
+                child: widget,
+              );
+            }
+            return widget;
           },
         ),
         if (widget.images.length > 1)
