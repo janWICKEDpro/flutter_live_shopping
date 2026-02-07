@@ -246,27 +246,18 @@ genhtml coverage/lcov.info -o coverage/html
 open coverage/html/index.html
 ```
 
+```markdown
 ## 📸 Screenshots
 
-> **Note** : Ajoutez vos captures d'écran dans un dossier `screenshots/` et référencez-les ici.
-
-```markdown
-### Page d'Accueil
-![Home Screen](screenshots/home_screen.png)
-
-### Événement en Direct
-![Live Event](screenshots/live_event_screen.png)
-
-### Détails Produit
-![Product Details](screenshots/product_details_screen.png)
-
-### Panier et Checkout
-![Checkout](screenshots/checkout.png)
+| Page d'Accueil | Événement en Direct |
+| :---: | :---: |
+| ![Home Screen](screenshots/home_screen.png) | ![Live Event](screenshots/live_event_screen.png) |
+| **Détails Produit** | **Panier et Checkout** |
+| ![Product Details](screenshots/product_details_screen.png) | ![Checkout](screenshots/checkout.png) |
 ```
 
-## 🎥 Vidéo de Démonstration
+##  Vidéo de Démonstration
 
-> **Note** : Enregistrez une vidéo de démonstration et ajoutez le lien ici.
 
 [Voir la vidéo de démonstration](link-to-video)
 
@@ -276,14 +267,5 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de 
 
 ## 👥 Contributeurs
 
-- Votre Nom - Développeur Principal
+- Agyingi Jan Royal - Développeur Principal
 
-## 🙏 Remerciements
-
-- Flutter Team pour le framework
-- Communauté Flutter pour les packages open-source
-- Unsplash et Pravatar pour les images de démonstration
-
----
-
-**Développé avec ❤️ et Flutter**
