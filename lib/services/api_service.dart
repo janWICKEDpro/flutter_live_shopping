@@ -40,26 +40,26 @@ class MockApiService {
             .toList();
       }
 
-      // Initialize cart from mock data if needed
-      if (_mockData!['cart'] != null && _mockData!['cart'] is List) {
-        final cartData = _mockData!['cart'] as List;
-        if (cartData.isNotEmpty) {
-          // Get the first user's cart (for demo purposes)
-          final userCart = cartData.first;
-          if (userCart['items'] != null) {
-            final cartItems = userCart['items'] as List;
-            log("cartItems: $cartItems");
-            // Hydrate cart items with product details
-            for (var item in cartItems) {
-              final productId = item['productId'];
-              final product = await _getProductByIdInternal(productId);
-              if (product != null) {
-                _cart.add(CartItem.fromJson(item).copyWith(product: product));
-              }
-            }
-          }
-        }
-      }
+      // // Initialize cart from mock data if needed
+      // if (_mockData!['cart'] != null && _mockData!['cart'] is List) {
+      //   final cartData = _mockData!['cart'] as List;
+      //   if (cartData.isNotEmpty) {
+      //     // Get the first user's cart (for demo purposes)
+      //     final userCart = cartData.first;
+      //     if (userCart['items'] != null) {
+      //       final cartItems = userCart['items'] as List;
+      //       log("cartItems: $cartItems");
+      //       // Hydrate cart items with product details
+      //       for (var item in cartItems) {
+      //         final productId = item['productId'];
+      //         final product = await _getProductByIdInternal(productId);
+      //         if (product != null) {
+      //           _cart.add(CartItem.fromJson(item).copyWith(product: product));
+      //         }
+      //       }
+      //     }
+      //   }
+      // }
     } catch (e) {
       log('Error loading mock data: $e');
       rethrow;
@@ -93,8 +93,6 @@ class MockApiService {
 
     final eventsData = _mockData!['liveEvents'] as List;
     final productsData = _mockData!['products'] as List;
-    log("${eventsData.length}");
-    log("${eventsData.first}");
     return eventsData.map((eventJson) {
       try {
         // Hydrate products

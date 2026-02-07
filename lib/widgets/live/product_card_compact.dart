@@ -132,6 +132,7 @@ class _ProductCardCompactState extends State<ProductCardCompact> {
                       style: const TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 12,
+                        color: AppColors.gray900,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -140,7 +141,7 @@ class _ProductCardCompactState extends State<ProductCardCompact> {
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: AppColors.primary,
-                        fontSize: 12,
+                        fontSize: 13,
                       ),
                     ),
                     const SizedBox(height: 8),

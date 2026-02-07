@@ -255,10 +255,10 @@ open coverage/html/index.html
 ![Home Screen](screenshots/home_screen.png)
 
 ### Événement en Direct
-![Live Event](screenshots/live_event.png)
+![Live Event](screenshots/live_event_screen.png)
 
 ### Détails Produit
-![Product Details](screenshots/product_details.png)
+![Product Details](screenshots/product_details_screen.png)
 
 ### Panier et Checkout
 ![Checkout](screenshots/checkout.png)

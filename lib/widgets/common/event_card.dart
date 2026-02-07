@@ -173,16 +173,22 @@ class _EventCardState extends State<EventCard> {
                         CircleAvatar(
                           radius: 12,
                           backgroundColor: AppColors.gray100,
-                          backgroundImage: widget.event.seller.avatar.isNotEmpty
-                              ? NetworkImage(widget.event.seller.avatar)
-                              : null,
-                          child: widget.event.seller.avatar.isEmpty
-                              ? Text(
-                                  widget.event.seller.name[0],
-                                  style: const TextStyle(fontSize: 10),
+                          foregroundImage: widget.event.seller.avatar.isNotEmpty
+                              ? CachedNetworkImageProvider(
+                                  widget.event.seller.avatar,
                                 )
                               : null,
+                          child: Text(
+                            widget.event.seller.name.isNotEmpty
+                                ? widget.event.seller.name[0]
+                                : '',
+                            style: const TextStyle(
+                              fontSize: 10,
+                              color: AppColors.gray600,
+                            ),
+                          ),
                         ),
+
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(

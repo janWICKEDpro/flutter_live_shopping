@@ -10,6 +10,7 @@ import 'package:flutter_live_shopping/widgets/live/video_player_widget.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class LiveEventScreen extends StatefulWidget {
   final String eventId;
@@ -273,12 +274,28 @@ class _LiveEventScreenState extends State<LiveEventScreen> {
                       children: [
                         CircleAvatar(
                           radius: 16,
-                          backgroundImage: NetworkImage(event.seller.avatar),
+                          backgroundColor: AppColors.gray200,
+                          foregroundImage: event.seller.avatar.isNotEmpty
+                              ? CachedNetworkImageProvider(event.seller.avatar)
+                              : null,
+                          child: Text(
+                            event.seller.name.isNotEmpty
+                                ? event.seller.name[0]
+                                : '',
+                            style: const TextStyle(
+                              fontSize: 12,
+                              color: AppColors.gray600,
+                            ),
+                          ),
                         ),
                         const SizedBox(width: 8),
                         Text(
                           event.seller.storeName,
-                          style: Theme.of(context).textTheme.bodyMedium,
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.gray900,
+                              ),
                         ),
                         const Spacer(),
                         Container(
@@ -292,10 +309,19 @@ class _LiveEventScreenState extends State<LiveEventScreen> {
                           ),
                           child: Row(
                             children: [
-                              const Icon(FontAwesomeIcons.eye, size: 12),
+                              const Icon(
+                                FontAwesomeIcons.eye,
+                                size: 12,
+                                color: AppColors.gray700,
+                              ),
                               const SizedBox(width: 4),
                               Text(
                                 '${provider.currentViewerCount > 0 ? provider.currentViewerCount : event.viewerCount}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.gray800,
+                                  fontSize: 13,
+                                ),
                               ),
                             ],
                           ),
@@ -366,8 +392,7 @@ class _LiveEventScreenState extends State<LiveEventScreen> {
                   child: ElevatedButton.icon(
                     icon: const Icon(Icons.shopping_cart),
                     label: Consumer<CartProvider>(
-                      builder: (_, cart, _) =>
-                          Text('Cart (${cart.itemCount})'),
+                      builder: (_, cart, _) => Text('Cart (${cart.itemCount})'),
                     ),
                     onPressed: () {
                       _scaffoldKey.currentState?.openEndDrawer();
@@ -416,16 +441,31 @@ class _LiveEventScreenState extends State<LiveEventScreen> {
                   children: [
                     CircleAvatar(
                       radius: 10,
-                      backgroundImage: NetworkImage(event.seller.avatar),
+                      backgroundColor: AppColors.gray200,
+                      foregroundImage: event.seller.avatar.isNotEmpty
+                          ? CachedNetworkImageProvider(event.seller.avatar)
+                          : null,
+                      child: Text(
+                        event.seller.name.isNotEmpty
+                            ? event.seller.name[0]
+                            : '',
+                        style: const TextStyle(
+                          fontSize: 8,
+                          color: AppColors.gray600,
+                        ),
+                      ),
                     ),
                     const SizedBox(width: 8),
                     Text(
                       event.seller.storeName,
                       style: const TextStyle(
-                        color: Colors.white70,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 12,
-                        shadows: [Shadow(color: Colors.black, blurRadius: 4)],
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13,
+                        shadows: [
+                          Shadow(color: Colors.black87, blurRadius: 8),
+                          Shadow(color: Colors.black54, blurRadius: 4),
+                        ],
                       ),
                     ),
                   ],
